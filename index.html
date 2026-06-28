@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResearchHub - Academic Reference Manager</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+<base target="_blank">
+</head>
+<body>
+    <div id="app">
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon"><i class="fa-solid fa-book-open-reader"></i></div>
+                    <span class="logo-text">ResearchHub</span>
+                </div>
+                <button class="sidebar-close" id="sidebarClose"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <nav class="sidebar-nav">
+                <div class="nav-section">
+                    <span class="nav-label">Overview</span>
+                    <ul class="nav-list">
+                        <li class="nav-item active" data-page="dashboard">
+                            <a href="#" class="nav-link"><i class="fa-solid fa-chart-pie"></i><span>Dashboard</span></a>
+                        </li>
+                        <li class="nav-item" data-page="references">
+                            <a href="#" class="nav-link"><i class="fa-solid fa-book-bookmark"></i><span>References</span><span class="nav-badge" id="navRefCount">0</span></a>
+                        </li>
+                        <li class="nav-item" data-page="projects">
+                            <a href="#" class="nav-link"><i class="fa-solid fa-folder-open"></i><span>Projects</span><span class="nav-badge" id="navProjCount">0</span></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="nav-section">
+                    <span class="nav-label">Tools</span>
+                    <ul class="nav-list">
+                        <li class="nav-item" data-page="citations">
+                            <a href="#" class="nav-link"><i class="fa-solid fa-quote-right"></i><span>Citation Generator</span></a>
+                        </li>
+                        <li class="nav-item" data-page="export">
+                            <a href="#" class="nav-link"><i class="fa-solid fa-file-csv"></i><span>Export Data</span></a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="user-card">
+                    <div class="user-avatar"><i class="fa-solid fa-graduation-cap"></i></div>
+                    <div class="user-info">
+                        <span class="user-name">Postgraduate Student</span>
+                        <span class="user-role">Research Scholar</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        <main class="main-content">
+            <header class="top-navbar">
+                <div class="navbar-left">
+                    <button class="menu-toggle" id="menuToggle"><i class="fa-solid fa-bars"></i></button>
+                    <div class="search-bar" id="globalSearchBar">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" placeholder="Search references, authors, tags..." id="globalSearchInput">
+                    </div>
+                </div>
+                <div class="navbar-right">
+                    <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode"><i class="fa-solid fa-moon"></i></button>
+                    <button class="btn btn-primary btn-sm" id="quickAddBtn"><i class="fa-solid fa-plus"></i><span>Add Reference</span></button>
+                </div>
+            </header>
+            <div class="page-content" id="pageContent">
+                <div class="page active" id="page-dashboard">
+                    <div class="page-header">
+                        <div>
+                            <h1 class="page-title">Dashboard</h1>
+                            <p class="page-subtitle">Welcome back! Here is your research overview.</p>
+                        </div>
+                        <div class="page-actions">
+                            <button class="btn btn-outline btn-sm" id="loadDemoData"><i class="fa-solid fa-wand-magic-sparkles"></i>Load Demo Data</button>
+                        </div>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon bg-primary"><i class="fa-solid fa-book"></i></div>
+                            <div class="stat-info"><span class="stat-value" id="statTotalRefs">0</span><span class="stat-label">Total References</span></div>
+                            <div class="stat-trend"><i class="fa-solid fa-arrow-trend-up"></i></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon bg-warning"><i class="fa-solid fa-book-open"></i></div>
+                            <div class="stat-info"><span class="stat-value" id="statReading">0</span><span class="stat-label">Reading</span></div>
+                            <div class="stat-trend"><i class="fa-solid fa-clock"></i></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon bg-success"><i class="fa-solid fa-circle-check"></i></div>
+                            <div class="stat-info"><span class="stat-value" id="statCompleted">0</span><span class="stat-label">Completed</span></div>
+                            <div class="stat-trend"><i class="fa-solid fa-arrow-trend-up"></i></div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon bg-danger"><i class="fa-solid fa-star"></i></div>
+                            <div class="stat-info"><span class="stat-value" id="statImportant">0</span><span class="stat-label">Important</span></div>
+                            <div class="stat-trend"><i class="fa-solid fa-bolt"></i></div>
+                        </div>
+                        <div class="stat-card stat-card-wide">
+                            <div class="stat-icon bg-info"><i class="fa-solid fa-chart-line"></i></div>
+                            <div class="stat-info"><span class="stat-value" id="statProgress">0%</span><span class="stat-label">Research Progress</span></div>
+                            <div class="stat-progress"><div class="progress-bar"><div class="progress-fill" id="statProgressBar" style="width:0%"></div></div></div>
+                        </div>
+                    </div>
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card">
+                            <div class="card-header"><h3><i class="fa-solid fa-clock-rotate-left"></i> Recent Activity</h3><button class="btn btn-text" id="viewAllActivity">View All</button></div>
+                            <div class="card-body"><div class="activity-list" id="recentActivityList"><div class="empty-state small"><i class="fa-solid fa-inbox"></i><p>No recent activity</p></div></div></div>
+                        </div>
+                        <div class="dashboard-card">
+                            <div class="card-header"><h3><i class="fa-solid fa-folder-tree"></i> Projects</h3><button class="btn btn-text" id="viewAllProjects">View All</button></div>
+                            <div class="card-body"><div class="project-list" id="dashboardProjects"><div class="empty-state small"><i class="fa-solid fa-folder-open"></i><p>No projects yet</p></div></div></div>
+                        </div>
+                        <div class="dashboard-card">
+                            <div class="card-header"><h3><i class="fa-solid fa-chart-simple"></i> Reading Stats</h3></div>
+                            <div class="card-body">
+                                <div class="reading-stats" id="readingStats">
+                                    <div class="reading-stat-item"><span class="reading-stat-label">Total Pages</span><span class="reading-stat-value" id="totalPages">0</span></div>
+                                    <div class="reading-stat-item"><span class="reading-stat-label">Pages Read</span><span class="reading-stat-value" id="pagesRead">0</span></div>
+                                    <div class="reading-stat-item"><span class="reading-stat-label">Avg. Progress</span><span class="reading-stat-value" id="avgProgress">0%</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" id="page-references">
+                    <div class="page-header">
+                        <div><h1 class="page-title">References</h1><p class="page-subtitle">Manage your academic references and papers.</p></div>
+                        <div class="page-actions"><button class="btn btn-primary" id="addReferenceBtn"><i class="fa-solid fa-plus"></i>Add Reference</button></div>
+                    </div>
+                    <div class="filters-bar">
+                        <div class="filter-group">
+                            <select class="filter-select" id="filterProject"><option value="">All Projects</option></select>
+                            <select class="filter-select" id="filterStatus"><option value="">All Status</option><option value="To Read">To Read</option><option value="Reading">Reading</option><option value="Completed">Completed</option><option value="On Hold">On Hold</option></select>
+                            <select class="filter-select" id="filterPriority"><option value="">All Priorities</option><option value="High">High</option><option value="Medium">Medium</option><option value="Low">Low</option></select>
+                            <select class="filter-select" id="filterType"><option value="">All Types</option><option value="Journal Article">Journal Article</option><option value="Book">Book</option><option value="Book Chapter">Book Chapter</option><option value="Conference Paper">Conference Paper</option><option value="Thesis">Thesis</option><option value="Report">Report</option><option value="Website">Website</option><option value="Other">Other</option></select>
+                            <select class="filter-select" id="filterYear"><option value="">All Years</option></select>
+                        </div>
+                        <div class="filter-actions"><button class="btn btn-outline btn-sm" id="clearFilters"><i class="fa-solid fa-filter-circle-xmark"></i>Clear</button></div>
+                    </div>
+                    <div class="references-grid" id="referencesGrid">
+                        <div class="empty-state" id="referencesEmpty">
+                            <div class="empty-icon"><i class="fa-solid fa-book-open"></i></div>
+                            <h3>No references found</h3>
+                            <p>Start building your research library by adding your first reference.</p>
+                            <button class="btn btn-primary" id="emptyAddRef"><i class="fa-solid fa-plus"></i>Add Reference</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" id="page-projects">
+                    <div class="page-header">
+                        <div><h1 class="page-title">Research Projects</h1><p class="page-subtitle">Organize your research into projects.</p></div>
+                        <div class="page-actions"><button class="btn btn-primary" id="addProjectBtn"><i class="fa-solid fa-plus"></i>New Project</button></div>
+                    </div>
+                    <div class="projects-grid" id="projectsGrid">
+                        <div class="empty-state" id="projectsEmpty">
+                            <div class="empty-icon"><i class="fa-solid fa-folder-tree"></i></div>
+                            <h3>No projects yet</h3>
+                            <p>Create projects to organize your research references.</p>
+                            <button class="btn btn-primary" id="emptyAddProject"><i class="fa-solid fa-plus"></i>Create Project</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" id="page-citations">
+                    <div class="page-header">
+                        <div><h1 class="page-title">Citation Generator</h1><p class="page-subtitle">Generate APA and MLA citations instantly.</p></div>
+                    </div>
+                    <div class="citations-container">
+                        <div class="citation-card">
+                            <div class="citation-header"><h3><i class="fa-solid fa-quote-left"></i> Select Reference</h3></div>
+                            <div class="citation-body"><select class="form-select" id="citationReferenceSelect"><option value="">Choose a reference...</option></select></div>
+                        </div>
+                        <div class="citation-results" id="citationResults" style="display:none;">
+                            <div class="citation-card">
+                                <div class="citation-header"><h3>APA 7th Edition</h3><button class="btn btn-outline btn-sm copy-citation" data-format="apa"><i class="fa-regular fa-copy"></i>Copy</button></div>
+                                <div class="citation-body"><div class="citation-text" id="apaCitation"></div></div>
+                            </div>
+                            <div class="citation-card">
+                                <div class="citation-header"><h3>MLA 9th Edition</h3><button class="btn btn-outline btn-sm copy-citation" data-format="mla"><i class="fa-regular fa-copy"></i>Copy</button></div>
+                                <div class="citation-body"><div class="citation-text" id="mlaCitation"></div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="page" id="page-export">
+                    <div class="page-header">
+                        <div><h1 class="page-title">Export Data</h1><p class="page-subtitle">Export your research data in various formats.</p></div>
+                    </div>
+                    <div class="export-grid">
+                        <div class="export-card">
+                            <div class="export-icon"><i class="fa-solid fa-file-csv"></i></div>
+                            <h3>Export to CSV</h3>
+                            <p>Download all your references as a CSV file compatible with Excel, Google Sheets, and other tools.</p>
+                            <div class="export-stats"><span><i class="fa-solid fa-book"></i> <span id="exportRefCount">0</span> references</span></div>
+                            <button class="btn btn-primary" id="exportCSV"><i class="fa-solid fa-download"></i>Download CSV</button>
+                        </div>
+                        <div class="export-card">
+                            <div class="export-icon"><i class="fa-solid fa-database"></i></div>
+                            <h3>Backup Data</h3>
+                            <p>Create a complete backup of all your data including references, projects, and settings.</p>
+                            <div class="export-stats"><span><i class="fa-solid fa-folder"></i> <span id="exportProjCount">0</span> projects</span></div>
+                            <button class="btn btn-outline" id="exportJSON"><i class="fa-solid fa-download"></i>Download JSON</button>
+                        </div>
+                        <div class="export-card">
+                            <div class="export-icon"><i class="fa-solid fa-upload"></i></div>
+                            <h3>Import Data</h3>
+                            <p>Restore your data from a previously exported JSON backup file.</p>
+                            <div class="export-stats"><span><i class="fa-solid fa-shield-halved"></i> Safe & Secure</span></div>
+                            <button class="btn btn-outline" id="importJSON"><i class="fa-solid fa-upload"></i>Import JSON</button>
+                            <input type="file" id="importFile" accept=".json" style="display:none">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    <div class="modal-overlay" id="refModal">
+        <div class="modal">
+            <div class="modal-header"><h2 id="refModalTitle">Add Reference</h2><button class="modal-close" id="refModalClose"><i class="fa-solid fa-xmark"></i></button></div>
+            <div class="modal-body">
+                <form id="refForm">
+                    <input type="hidden" id="refId">
+                    <div class="form-row">
+                        <div class="form-group"><label for="refTitle">Title <span class="required">*</span></label><input type="text" class="form-input" id="refTitle" required placeholder="Enter reference title"></div>
+                        <div class="form-group"><label for="refAuthor">Author(s) <span class="required">*</span></label><input type="text" class="form-input" id="refAuthor" required placeholder="e.g., Smith, J. & Doe, A."></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label for="refYear">Year <span class="required">*</span></label><input type="number" class="form-input" id="refYear" required placeholder="2024" min="1900" max="2100"></div>
+                        <div class="form-group"><label for="refType">Type <span class="required">*</span></label><select class="form-select" id="refType" required><option value="">Select type</option><option value="Journal Article">Journal Article</option><option value="Book">Book</option><option value="Book Chapter">Book Chapter</option><option value="Conference Paper">Conference Paper</option><option value="Thesis">Thesis</option><option value="Report">Report</option><option value="Website">Website</option><option value="Other">Other</option></select></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label for="refStatus">Status</label><select class="form-select" id="refStatus"><option value="To Read">To Read</option><option value="Reading">Reading</option><option value="Completed">Completed</option><option value="On Hold">On Hold</option></select></div>
+                        <div class="form-group"><label for="refPriority">Priority</label><select class="form-select" id="refPriority"><option value="Low">Low</option><option value="Medium">Medium</option><option value="High">High</option></select></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label for="refProject">Project</label><select class="form-select" id="refProject"><option value="">No Project</option></select></div>
+                        <div class="form-group"><label for="refTags">Tags <small>(comma separated)</small></label><input type="text" class="form-input" id="refTags" placeholder="AI, NLP, Machine Learning"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label for="refTotalPages">Total Pages</label><input type="number" class="form-input" id="refTotalPages" min="1" placeholder="e.g., 250"></div>
+                        <div class="form-group"><label for="refPagesRead">Pages Read</label><input type="number" class="form-input" id="refPagesRead" min="0" placeholder="e.g., 120"></div>
+                    </div>
+                    <div class="form-group"><label for="refURL">URL / DOI</label><input type="url" class="form-input" id="refURL" placeholder="https://..."></div>
+                    <div class="form-group"><label for="refNotes">Notes</label><textarea class="form-textarea" id="refNotes" rows="3" placeholder="Add your notes about this reference..."></textarea></div>
+                </form>
+            </div>
+            <div class="modal-footer"><button class="btn btn-outline" id="refModalCancel">Cancel</button><button class="btn btn-primary" id="refModalSave">Save Reference</button></div>
+        </div>
+    </div>
+    <div class="modal-overlay" id="projectModal">
+        <div class="modal">
+            <div class="modal-header"><h2 id="projectModalTitle">New Project</h2><button class="modal-close" id="projectModalClose"><i class="fa-solid fa-xmark"></i></button></div>
+            <div class="modal-body">
+                <form id="projectForm">
+                    <input type="hidden" id="projectId">
+                    <div class="form-group"><label for="projectName">Project Name <span class="required">*</span></label><input type="text" class="form-input" id="projectName" required placeholder="e.g., Master's Thesis"></div>
+                    <div class="form-group"><label for="projectDescription">Description</label><textarea class="form-textarea" id="projectDescription" rows="3" placeholder="Describe your project..."></textarea></div>
+                    <div class="form-group"><label for="projectDeadline">Deadline</label><input type="date" class="form-input" id="projectDeadline"></div>
+                </form>
+            </div>
+            <div class="modal-footer"><button class="btn btn-outline" id="projectModalCancel">Cancel</button><button class="btn btn-primary" id="projectModalSave">Save Project</button></div>
+        </div>
+    </div>
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal modal-sm">
+            <div class="modal-header"><h2>Confirm Delete</h2><button class="modal-close" id="deleteModalClose"><i class="fa-solid fa-xmark"></i></button></div>
+            <div class="modal-body"><p id="deleteModalMessage">Are you sure you want to delete this item? This action cannot be undone.</p></div>
+            <div class="modal-footer"><button class="btn btn-outline" id="deleteModalCancel">Cancel</button><button class="btn btn-danger" id="deleteModalConfirm">Delete</button></div>
+        </div>
+    </div>
+    <div class="modal-overlay" id="detailModal">
+        <div class="modal modal-lg">
+            <div class="modal-header"><h2>Reference Details</h2><button class="modal-close" id="detailModalClose"><i class="fa-solid fa-xmark"></i></button></div>
+            <div class="modal-body" id="detailModalBody"></div>
+            <div class="modal-footer"><button class="btn btn-outline" id="detailModalEdit">Edit</button><button class="btn btn-primary" id="detailModalCloseBtn">Close</button></div>
+        </div>
+    </div>
+    <div class="toast-container" id="toastContainer"></div>
+    <script src="app.js"></script>
+</body>
+</html>
